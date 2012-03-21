@@ -51,6 +51,13 @@
     player.actionAtItemEnd = AVPlayerActionAtItemEndNone; 
     [playerItem addObserver:self forKeyPath:@"timedMetadata" options:NSKeyValueObservingOptionNew context:nil];
     [player addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+    
+    // Allow to play in background
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+	[[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
+    // Receive remote events
+	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
@@ -130,6 +137,16 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 	}
 }
 
+- (void)togglePlayPause {
+    if ([self isPlaying]) {
+        [player pause];
+        [self showPlayButton];
+    } else {
+        [player play];
+        [self showPauseButton];        
+    }
+}
+
 - (void)enablePlayerButtons
 {
     self.playButton.enabled = YES;
@@ -154,6 +171,23 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
     [self showPlayButton];
 }
 
+-(BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
+	if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
+		[self togglePlayPause];
+    }
+	if (event.subtype == UIEventSubtypeRemoteControlPlay) {
+		[player play];
+        [self showPauseButton];
+	}
+	if (event.subtype == UIEventSubtypeRemoteControlPause) {
+		[player pause];
+        [self showPlayButton];
+	}
+}
 
 - (void)viewDidUnload
 {
@@ -171,14 +205,16 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+	[self becomeFirstResponder];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+    [self resignFirstResponder];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
