@@ -176,17 +176,18 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event {
-	if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
-		[self togglePlayPause];
+    NSLog(@"remoteControlReceivedWithEvent");
+    switch (event.subtype) {
+        case UIEventSubtypeRemoteControlTogglePlayPause:
+            [self togglePlayPause];
+            break;
+        case UIEventSubtypeRemoteControlNextTrack:
+            break;
+        case UIEventSubtypeRemoteControlPreviousTrack:
+            break;
+        default:
+            break;
     }
-	if (event.subtype == UIEventSubtypeRemoteControlPlay) {
-		[player play];
-        [self showPauseButton];
-	}
-	if (event.subtype == UIEventSubtypeRemoteControlPause) {
-		[player pause];
-        [self showPlayButton];
-	}
 }
 
 - (void)viewDidUnload
