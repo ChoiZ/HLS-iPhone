@@ -38,10 +38,10 @@
     
     // Choose your station ;)
     
-	//stringurl = @"http://hls1.addictradio.net:80/addictalternative_hls/playlist.m3u8";
-	//stringurl = @"http://hls1.addictradio.net:80/addictlounge_hls/playlist.m3u8";
-	stringurl = @"http://hls1.addictradio.net:80/addictrock_hls/playlist.m3u8";
-	//stringurl = @"http://hls1.addictradio.net:80/addictstar_hls/playlist.m3u8";
+    //stringurl = @"http://hls1.addictradio.net:80/addictalternative_hls/playlist.m3u8";
+    //stringurl = @"http://hls1.addictradio.net:80/addictlounge_hls/playlist.m3u8";
+    stringurl = @"http://hls1.addictradio.net:80/addictrock_hls/playlist.m3u8";
+    //stringurl = @"http://hls1.addictradio.net:80/addictstar_hls/playlist.m3u8";
 	
     NSURL *url = [NSURL URLWithString:stringurl];
     
@@ -54,10 +54,10 @@
     
     // Allow to play in background
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-	[[AVAudioSession sharedInstance] setActive:YES error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
     // Receive remote events
-	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
@@ -75,7 +75,7 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change context:(void *)context {
+        change:(NSDictionary *)change context:(void *)context {
     
     if ([keyPath isEqualToString:@"status"]) {
         AVPlayerItem *pItem = (AVPlayerItem *)object;
@@ -99,14 +99,14 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
                         metadatas.text = source;
                     }
                 }
-			}
+	    }
         }
     }
 }
 
 - (BOOL)isPlaying
 {
-	return [player rate] != 0.f;
+    return [player rate] != 0.f;
 }
 
 - (void)showPauseButton
@@ -127,14 +127,11 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 
 - (void)playpause
 {
-	if ([self isPlaying])
-	{
+    if ([self isPlaying]) {
         [self showPauseButton];
-	}
-	else
-	{
+    } else {
         [self showPlayButton];        
-	}
+    }
 }
 
 - (void)togglePlayPause {
@@ -161,13 +158,13 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 
 - (IBAction)play:(id)sender
 {
-	[player play];
+    [player play];
     [self showPauseButton];  
 }
 
 - (IBAction)pause:(id)sender
 {
-	[player pause];
+    [player pause];
     [self showPlayButton];
 }
 
@@ -209,7 +206,7 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-	[self becomeFirstResponder];
+    [self becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -220,7 +217,7 @@ static Float64 secondsWithCMTimeOrZeroIfInvalid(CMTime time) {
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-	[super viewDidDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
